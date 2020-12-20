@@ -1,14 +1,11 @@
 
-# Best Function -----------------------------------------------------------
+# Rankhospital function ---------------------------------------------------
 
-## Arguements:
-## state:       2-character state sbbreviation (string)
-## outcome:     medical condition (string)
 
 library(dplyr)
 library(stringr)
         
-best <- function(State, Outcome) {
+rankhospital <- function(State, Outcome, num = "best") {
         
         data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
         names(data) <- tolower(names(data))
@@ -35,6 +32,12 @@ best <- function(State, Outcome) {
                 mutate(rate = as.numeric(rate)) %>% 
                 arrange(rate, hospital.name)
         
-        return(output$hospital.name[1])
+        if(num == 'best') {
+                num <- 1
+        } else if(num == 'worst') {
+                num = nrow(output)
+        }
+        
+        return(output$hospital.name[num])
         
 }
